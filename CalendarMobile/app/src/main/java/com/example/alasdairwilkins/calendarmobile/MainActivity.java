@@ -230,22 +230,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void createEvent(View view) {
         Intent intent = new Intent(this, CreateEventActivity.class);
-        HashMap<String,Integer> message = new HashMap<String,Integer>();
-        message.put("Year", calendar.get(Calendar.YEAR));
-        message.put("Month", calendar.get(Calendar.MONTH));
-        message.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
-        intent.putExtra("map", message);
+        HashMap<String,Integer> hashMap = makeHashMap(calendar);
+        intent.putExtra("map", hashMap);
         startActivity(intent);
     }
 
     public void seeEvents(View view) {
         Intent intent = new Intent(this, ShowEventsActivity.class);
-        HashMap<String,Integer> message = new HashMap<String,Integer>();
-        message.put("Year", calendar.get(Calendar.YEAR));
-        message.put("Month", calendar.get(Calendar.MONTH));
-        message.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
+        HashMap<String,Integer> message = makeHashMap(calendar);
         intent.putExtra("map", message);
         startActivity(intent);
+    }
+
+    public HashMap<String,Integer> makeHashMap(Calendar calendar){
+        HashMap newMap = new HashMap<String,Integer>();
+        newMap.put("Year", calendar.get(Calendar.YEAR));
+        newMap.put("Month", calendar.get(Calendar.MONTH));
+        newMap.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
+        return newMap;
     }
 
     public void setMinimumDate(Calendar cal, int month) {
