@@ -48,6 +48,11 @@ abstract class EventActivity extends AppCompatActivity {
     public TimePickerDialog.OnTimeSetListener endTimeSetListener;
     public CheckBox allDayCheckBox;
     public Button submitButton;
+    private String TAG = "EventActivity";
+
+    final Calendar startCalendar = Calendar.getInstance();
+    final Calendar endCalendar = (Calendar) startCalendar.clone();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +62,6 @@ abstract class EventActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_create_event);
-
-        Intent intent = getIntent();
-        HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
 
         eventTitle = (EditText) findViewById(R.id.title);
         eventTitle.addTextChangedListener(new TextWatcher() {
@@ -86,20 +88,6 @@ abstract class EventActivity extends AppCompatActivity {
         endDateTextView = (TextView) findViewById(R.id.endDate);
         endTimeTextView = (TextView) findViewById(R.id.endTime);
 
-        final Calendar startCalendar = Calendar.getInstance();
-        startCalendar.set(message.get("Year"), message.get("Month"), message.get("Day"));
-        final Calendar endCalendar = (Calendar) startCalendar.clone();
-        endCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.get(Calendar.HOUR_OF_DAY) + 1);
-
-        String hintStartDate = dateString(startCalendar);
-        String hintStartTime = timeString(startCalendar);
-        String hintEndDate = dateString(endCalendar);
-        String hintEndTime = timeString(endCalendar);
-
-        startDateTextView.setText(hintStartDate);
-        startTimeTextView.setHint(hintStartTime);
-        endDateTextView.setText(hintEndDate);
-        endTimeTextView.setHint(hintEndTime);
 
         allDayCheckBox = (CheckBox) findViewById(R.id.allDay);
 
@@ -126,10 +114,8 @@ abstract class EventActivity extends AppCompatActivity {
         startDateTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 DatePickerDialog dialog = makeDatePickerDialog(startCalendar, startDateSetListener);
                 dialog.show();
-
             }
 
         });
@@ -231,9 +217,9 @@ abstract class EventActivity extends AppCompatActivity {
                     eventObject.put("end_time", endCalendar.getTimeInMillis());
                     eventObject.put("all_day", allDayCheckBox.isChecked());
                 } catch (JSONException e) {
-                    Log.e(CreateEventActivity.TAG, "Unexpected JSON exception", e);
+                    Log.e(TAG, "Unexpected JSON exception", e);
                 }
-                Log.d(CreateEventActivity.TAG, eventObject.toString());
+                Log.d(TAG, eventObject.toString());
 
                 RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(EventActivity.this);
                 String url = "http://10.0.17.212:8000/events";

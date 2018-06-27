@@ -3,6 +3,7 @@ package com.example.alasdairwilkins.calendarmobile;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.app.VoiceInteractor;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.StrictMode;
@@ -44,10 +45,38 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 public class CreateEventActivity extends EventActivity {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        Intent intent = getIntent();
+        HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
+
+        startCalendar.set(message.get("Year"), message.get("Month"), message.get("Day"));
+        endCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.get(Calendar.HOUR_OF_DAY) + 1);
+
+        String hintStartDate = dateString(startCalendar);
+        String hintStartTime = timeString(startCalendar);
+        String hintEndDate = dateString(endCalendar);
+        String hintEndTime = timeString(endCalendar);
+
+        startDateTextView.setText(hintStartDate);
+        startTimeTextView.setHint(hintStartTime);
+        endDateTextView.setText(hintEndDate);
+        endTimeTextView.setHint(hintEndTime);
+
+
+
+
+
+    }
 }

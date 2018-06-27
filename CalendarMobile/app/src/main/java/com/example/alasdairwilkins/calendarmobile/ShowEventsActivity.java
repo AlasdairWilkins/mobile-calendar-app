@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class ShowEventsActivity extends AppCompatActivity {
 
-    private String TAG = "SHOWEVENTSACTIVITY";
+    private String TAG = "ShowEventsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +30,6 @@ public class ShowEventsActivity extends AppCompatActivity {
 
         HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
         String jsonString = intent.getStringExtra("events");
-
-        Log.d(TAG, "Extras received: " + message + ", " + jsonString);
-
 
 
         try {
