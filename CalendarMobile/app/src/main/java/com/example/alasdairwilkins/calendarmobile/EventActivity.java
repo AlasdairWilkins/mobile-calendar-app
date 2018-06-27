@@ -30,12 +30,14 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
 abstract class EventActivity extends AppCompatActivity {
+    public TextView activityHeader;
     public EditText eventTitle;
     public EditText eventDescription;
     public TextView startDateTextView;
@@ -62,6 +64,8 @@ abstract class EventActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_create_event);
+
+        activityHeader = (TextView) findViewById(R.id.activityHeader);
 
         eventTitle = (EditText) findViewById(R.id.title);
         eventTitle.addTextChangedListener(new TextWatcher() {
@@ -203,47 +207,6 @@ abstract class EventActivity extends AppCompatActivity {
                 checkSubmit();
             }
         };
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                JSONObject eventObject = new JSONObject();
-                try {
-                    eventObject.put("user", "Alasdair Wilkins");
-                    eventObject.put("title", eventTitle.getText());
-                    eventObject.put("description", eventDescription.getText());
-                    eventObject.put("start_time", startCalendar.getTimeInMillis());
-                    eventObject.put("end_time", endCalendar.getTimeInMillis());
-                    eventObject.put("all_day", allDayCheckBox.isChecked());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Unexpected JSON exception", e);
-                }
-                Log.d(TAG, eventObject.toString());
-
-                RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(EventActivity.this);
-                String url = "http://10.0.17.212:8000/events";
-
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                        (Request.Method.POST, url, eventObject, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject responseObject) {
-                                Log.d("EVENT ACTIVITY", "Response object: " + responseObject);
-                                Intent intent = new Intent(EventActivity.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("EVENT ACTIVITY", "Error: " + error);
-                            }
-                        });
-
-                requestQueue.add(jsonObjectRequest);
-
-            }
-        });
-
 
     }
 

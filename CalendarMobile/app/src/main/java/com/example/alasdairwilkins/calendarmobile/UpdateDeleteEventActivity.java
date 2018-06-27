@@ -19,6 +19,9 @@ public class UpdateDeleteEventActivity extends EventActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        activityHeader.setText("Update or Delete Event");
+        submitButton.setText("Update");
+
         Intent intent = getIntent();
 
         String jsonString = intent.getStringExtra("updateEvent");
@@ -43,12 +46,12 @@ public class UpdateDeleteEventActivity extends EventActivity {
             String endTime = timeString(endCalendar);
 
             eventTitle.setText(title);
-            eventTitle.setText(description);
+            eventDescription.setText(description);
 
             startDateTextView.setText(startDate);
-            startTimeTextView.setHint(startTime);
+            startTimeTextView.setText(startTime);
             endDateTextView.setText(endDate);
-            endTimeTextView.setHint(endTime);
+            endTimeTextView.setText(endTime);
 
         } catch (org.json.JSONException error) {
             Log.e(TAG, "Error: " + error);

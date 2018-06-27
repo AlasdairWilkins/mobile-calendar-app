@@ -51,12 +51,20 @@ import java.util.concurrent.Future;
 
 public class CreateEventActivity extends EventActivity {
 
+    private String TAG = "CreateEventActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        activityHeader.setText("Create Event");
+
+        eventTitle.setHint("Title");
+        eventDescription.setHint("Description (optional)");
+        submitButton.setText("Submit");
 
         Intent intent = getIntent();
         HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
@@ -73,6 +81,47 @@ public class CreateEventActivity extends EventActivity {
         startTimeTextView.setHint(hintStartTime);
         endDateTextView.setText(hintEndDate);
         endTimeTextView.setHint(hintEndTime);
+
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                JSONObject eventObject = new JSONObject();
+                try {
+                    eventObject.put("user", "Alasdair Wilkins");
+                    eventObject.put("title", eventTitle.getText());
+                    eventObject.put("description", eventDescription.getText());
+                    eventObject.put("start_time", startCalendar.getTimeInMillis());
+                    eventObject.put("end_time", endCalendar.getTimeInMillis());
+                    eventObject.put("all_day", allDayCheckBox.isChecked());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Unexpected JSON exception", e);
+                }
+                Log.d(TAG, eventObject.toString());
+
+                RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(CreateEventActivity.this);
+                String url = "http://10.0.17.212:8000/events";
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                        (Request.Method.POST, url, eventObject, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject responseObject) {
+                                Log.d(TAG, "Response object: " + responseObject);
+                                Intent intent = new Intent(CreateEventActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e(TAG, "Error: " + error);
+                            }
+                        });
+
+                requestQueue.add(jsonObjectRequest);
+
+            }
+        });
 
 
 
