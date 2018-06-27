@@ -36,7 +36,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-abstract class EventActivity extends AppCompatActivity {
+abstract class EventActivity extends TimeManipulationSuperClass {
     public TextView activityHeader;
     public EditText eventTitle;
     public EditText eventDescription;
@@ -226,18 +226,6 @@ abstract class EventActivity extends AppCompatActivity {
             }
         }
         return false;
-    }
-
-    public String dateString(Calendar calendar) {
-        return calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " +
-                calendar.get(Calendar.DAY_OF_MONTH) + ", " + calendar.get(Calendar.YEAR);
-
-    }
-
-    public String timeString(Calendar calendar) {
-        return ((calendar.get(Calendar.HOUR) == 0) ? 12 : calendar.get(Calendar.HOUR)) + ":" +
-                ((calendar.get(Calendar.MINUTE) < 10) ? "0" : "") + calendar.get(Calendar.MINUTE) + " " +
-                calendar.getDisplayName(Calendar.AM_PM, Calendar.LONG, Locale.ENGLISH);
     }
 
     public DatePickerDialog makeDatePickerDialog(Calendar calendar, DatePickerDialog.OnDateSetListener dateSetListener) {
