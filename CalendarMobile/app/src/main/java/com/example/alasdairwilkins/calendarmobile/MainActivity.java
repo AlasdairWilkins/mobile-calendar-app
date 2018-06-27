@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends TimeManipulationSuperClass {
 
     private static final String TAG = "MainActivity";
 
@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView nextMonthTextView;
     private Button createEventButton;
     private Button viewEventButton;
-
-    private long startRange = 0;
-    private long endRange = 0;
 
     private int displayMonth = 0;
     private int displayYear = 0;
@@ -65,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
 
         long startMillis = getMinimumDate(calendar);
         long endMillis = getMaximumDate(calendar);
-        startRange = startMillis;
-        endRange = endMillis;
 
         getEvents(startMillis, endMillis);
 
@@ -105,23 +100,12 @@ public class MainActivity extends AppCompatActivity {
         previousMonthTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                setMinimumDate(calendar, displayMonth);
-//                displayMonth = calendar.get(Calendar.MONTH);
-//                displayYear = calendar.get(Calendar.YEAR);
-//                if (startRange <= calendar.getTimeInMillis()) {
-//                    Log.d(TAG, "Current Info: Not yet!");
-//                    buildMonth(eventsObject, displayMonth, displayYear);
-//                } else {
-//                    Calendar prevCal = (Calendar) calendar.clone();
-////                    setMaximumDate(prevCal, displayMonth);
-//                    long endMillis = prevCal.getTimeInMillis();
-////                    setMinimumDate(prevCal, displayMonth);
-//                    long startMillis = prevCal.getTimeInMillis();
-//                    startRange = startMillis;
-//                    endRange = endMillis;
-//                    Log.d(TAG, "Range: " + startMillis + ", " + endMillis);
-//                    getEvents(startMillis, endMillis);
-//                }
+                calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+                displayMonth = calendar.get(Calendar.MONTH);
+                displayYear = calendar.get(Calendar.YEAR);
+                long startMillis = getMinimumDate(calendar);
+                long endMillis = getMaximumDate(calendar);
+                getEvents(startMillis, endMillis);
             }
         });
 
@@ -131,7 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
                 displayMonth = calendar.get(Calendar.MONTH);
                 displayYear = calendar.get(Calendar.YEAR);
-                buildMonth(eventsObject, displayMonth, displayYear);
+                long startMillis = getMinimumDate(calendar);
+                long endMillis = getMaximumDate(calendar);
+                getEvents(startMillis, endMillis);
             }
         });
     }
@@ -265,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, Integer> message = makeHashMap(calendar);
         intent.putExtra("map", message);
 
-        setMinimumTime(calendar);
-        String dateKey = Long.toString(calendar.getTimeInMillis());
+        Long dateLong = getMinimumTime(calendar);
+        String dateKey = Long.toString(dateLong);
         try {
             JSONArray eventsArray = (JSONArray) eventsObject.get(dateKey);
             intent.putExtra("events", eventsArray.toString());
@@ -284,52 +270,4 @@ public class MainActivity extends AppCompatActivity {
         return newMap;
     }
 
-    public void setMinimumDate(Calendar cal, int month) {
-//        , int month
-//        cal.set(Calendar.MONTH, month - 1);
-//        Log.d(TAG, "Current Info: " + cal.get(Calendar.MONTH) + ", " + cal.get(Calendar.YEAR));
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-    }
-
-    public void setMinimumTime(Calendar cal) {
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-    }
-
-    public void setMaximumDate(Calendar cal) {
-        //        , int month
-//        cal.set(Calendar.MONTH, month + 1);
-//        cal.get(Calendar.YEAR);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-    }
-
-    public void setMaximumTime(Calendar cal) {
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-    }
-
-    public long getMinimumDate(Calendar cal) {
-        Calendar minCal = Calendar.getInstance();
-        minCal.set(cal.get(Calendar.YEAR),
-                cal.get(Calendar.MONTH) - 1,
-                1, 0, 0, 0);
-        minCal.set(Calendar.MILLISECOND, 0);
-        return minCal.getTimeInMillis();
-    }
-
-    public long getMaximumDate(Calendar cal) {
-        Calendar maxCal = Calendar.getInstance();
-        maxCal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-        maxCal.set(Calendar.MONTH, cal.get(Calendar.MONTH) + 1);
-        maxCal.set(Calendar.DAY_OF_MONTH, maxCal.getActualMaximum(maxCal.DAY_OF_MONTH));
-        maxCal.set(Calendar.HOUR_OF_DAY, 23);
-        maxCal.set(Calendar.MINUTE, 59);
-        maxCal.set(Calendar.SECOND, 59);
-        maxCal.set(Calendar.MILLISECOND, 999);
-        return maxCal.getTimeInMillis();
-    }
 }

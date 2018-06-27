@@ -1,9 +1,8 @@
 package com.example.alasdairwilkins.calendarmobile;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class AllEventsActivity extends ShowActivity {
+public class AllEventsActivity extends ShowSuperClass {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

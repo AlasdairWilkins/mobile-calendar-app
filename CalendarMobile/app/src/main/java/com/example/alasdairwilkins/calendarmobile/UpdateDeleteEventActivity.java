@@ -2,7 +2,6 @@ package com.example.alasdairwilkins.calendarmobile;
 
 import android.content.Intent;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UpdateDeleteEventActivity extends EventActivity {
+public class UpdateDeleteEventActivity extends EventSuperClass {
 
 
     private String TAG = "UpdateDeleteEventActivity";
@@ -40,7 +39,6 @@ public class UpdateDeleteEventActivity extends EventActivity {
         activityHeader.setText("Update or Delete Event");
 
         submitButton = (Button) findViewById(R.id.submit);
-        submitButton.setEnabled(true);
         deleteButton = (Button) findViewById(R.id.delete);
 
         Intent intent = getIntent();

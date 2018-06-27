@@ -2,7 +2,6 @@ package com.example.alasdairwilkins.calendarmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +12,10 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.Calendar;
 
-abstract class ShowActivity extends AppCompatActivity {
-    private String TAG = "ShowActivity";
+abstract class ShowSuperClass extends TimeManipulationSuperClass {
+    private String TAG = "ShowSuperClass";
 
     public Intent intent;
 
@@ -52,12 +51,32 @@ abstract class ShowActivity extends AppCompatActivity {
                     String description = jsonArray.getJSONObject(i).getString("description");
                     Boolean allDay = Boolean.parseBoolean(jsonArray.getJSONObject(i).getString("all_day"));
                     Long startLong = jsonArray.getJSONObject(i).getLong("start_time");
-                    Long endLong = jsonArray.getJSONObject(i).getLong("start_time");
-
+                    Long endLong = jsonArray.getJSONObject(i).getLong("end_time");
+                    Calendar startCal = Calendar.getInstance();
+                    startCal.setTimeInMillis(startLong);
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.setTimeInMillis(endLong);
+                    String startDate = dateString(startCal);
+                    String endDate = dateString(endCal);
                     if (allDay) {
-                        textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description + "</em><br/>"));
+                        if (startLong == endLong) {
+                            textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description
+                                    + "</em><br/>" + startDate));
+                        } else {
+                            textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description
+                                    + "</em><br/>" + startDate + " to " + endDate));
+                        }
                     } else {
-                        textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description + "</em><br/>" + startLong + " to " + endLong + "<br/>"));
+                        String startTime = timeString(startCal);
+                        String endTime = timeString(endCal);
+                        if (startDate.equals(endDate)) {
+                            textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description
+                                    + "</em><br/>" + startTime + " to " + endTime + " on " + startDate + "<br/>"));
+                        } else {
+                            textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description
+                                    + "</em><br/>" + startTime + " on " + startDate + " to " + endTime + " on "
+                                    + endDate + "<br/>"));
+                        }
                     }
 
                     textView.setTag(i);
@@ -68,7 +87,7 @@ abstract class ShowActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             try {
                                 int i = (int) textView.getTag();
-                                Intent intent = new Intent(ShowActivity.this, UpdateDeleteEventActivity.class);
+                                Intent intent = new Intent(ShowSuperClass.this, UpdateDeleteEventActivity.class);
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 intent.putExtra("updateEvent", jsonObject.toString());
                                 startActivity(intent);

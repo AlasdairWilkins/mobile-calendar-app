@@ -2,16 +2,12 @@ package com.example.alasdairwilkins.calendarmobile;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.EventLog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -21,22 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Locale;
 
-abstract class EventActivity extends TimeManipulationSuperClass {
+abstract class EventSuperClass extends TimeManipulationSuperClass {
     public TextView activityHeader;
     public EditText eventTitle;
     public EditText eventDescription;
@@ -50,7 +33,7 @@ abstract class EventActivity extends TimeManipulationSuperClass {
     public TimePickerDialog.OnTimeSetListener endTimeSetListener;
     public CheckBox allDayCheckBox;
     public Button submitButton;
-    private String TAG = "EventActivity";
+    private String TAG = "EventSuperClass";
 
     final Calendar startCalendar = Calendar.getInstance();
     final Calendar endCalendar = (Calendar) startCalendar.clone();
@@ -230,7 +213,7 @@ abstract class EventActivity extends TimeManipulationSuperClass {
 
     public DatePickerDialog makeDatePickerDialog(Calendar calendar, DatePickerDialog.OnDateSetListener dateSetListener) {
         DatePickerDialog dialog = new DatePickerDialog(
-                EventActivity.this,
+                EventSuperClass.this,
                 android.R.style.Theme_DeviceDefault,
                 dateSetListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -241,7 +224,7 @@ abstract class EventActivity extends TimeManipulationSuperClass {
 
     public TimePickerDialog makeTimePickerDialog(Calendar calendar, TimePickerDialog.OnTimeSetListener timeSetListener) {
         TimePickerDialog dialog = new TimePickerDialog(
-                EventActivity.this,
+                EventSuperClass.this,
                 timeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

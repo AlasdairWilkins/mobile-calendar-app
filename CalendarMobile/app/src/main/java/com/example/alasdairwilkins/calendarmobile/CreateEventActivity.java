@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class CreateEventActivity extends EventActivity {
+public class CreateEventActivity extends EventSuperClass {
 
     private String TAG = "CreateEventActivity";
 
