@@ -49,7 +49,5 @@ import java.util.concurrent.Future;
 
 public class CreateEventActivity extends EventActivity {
 
-    public static final String TAG = "CreateEventActivity";
-
 
 }
