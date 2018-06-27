@@ -239,7 +239,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void seeEvents(View view) {
-        Log.d(TAG, "TEST");
+        Intent intent = new Intent(this, ShowEventsActivity.class);
+        HashMap<String,Integer> message = new HashMap<String,Integer>();
+        message.put("Year", calendar.get(Calendar.YEAR));
+        message.put("Month", calendar.get(Calendar.MONTH));
+        message.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
+        intent.putExtra("map", message);
+        startActivity(intent);
     }
 
     public void setMinimumDate(Calendar cal, int month) {
