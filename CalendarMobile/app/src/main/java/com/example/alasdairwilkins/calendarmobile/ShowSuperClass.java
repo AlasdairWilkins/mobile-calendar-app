@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -13,9 +14,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 abstract class ShowSuperClass extends TimeManipulationSuperClass {
     private String TAG = "ShowSuperClass";
+
+    public ScrollView showEventsScrollView;
+    public TextView showEventsTitle;
+    public Button createEventButton;
+
 
     public Intent intent;
 
@@ -29,6 +36,21 @@ abstract class ShowSuperClass extends TimeManipulationSuperClass {
 
         String jsonString = intent.getStringExtra("events");
 
+        showEventsTitle = new TextView(this);
+
+        showEventsScrollView = findViewById(R.id.showEventsScrollView);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        showEventsScrollView.addView(linearLayout);
+
+        linearLayout.addView(showEventsTitle);
+
+        createEventButton = new Button(this);
+        createEventButton.setText("Create event");
+
+        linearLayout.addView(createEventButton);
+
+
         try {
 
             final JSONArray jsonArray = new JSONArray(jsonString);
@@ -38,11 +60,6 @@ abstract class ShowSuperClass extends TimeManipulationSuperClass {
             int jsonArrayLength = jsonArray.length();
 
             if (jsonArrayLength > 0) {
-
-                ScrollView scrollView = new ScrollView(this);
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-                scrollView.addView(linearLayout);
 
 
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -100,14 +117,11 @@ abstract class ShowSuperClass extends TimeManipulationSuperClass {
                     });
 
                 }
-                this.setContentView(scrollView);
             }
 
         } catch (org.json.JSONException error) {
             Log.e(TAG, "Error: " + error);
         }
-
-
 
 
     }

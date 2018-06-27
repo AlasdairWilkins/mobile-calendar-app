@@ -35,8 +35,8 @@ abstract class EventSuperClass extends TimeManipulationSuperClass {
     public Button submitButton;
     private String TAG = "EventSuperClass";
 
-    final Calendar startCalendar = Calendar.getInstance();
-    final Calendar endCalendar = (Calendar) startCalendar.clone();
+    public Calendar startCalendar = Calendar.getInstance();
+    public Calendar endCalendar;
 
 
     @Override

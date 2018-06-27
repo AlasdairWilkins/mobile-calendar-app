@@ -49,6 +49,7 @@ public class CreateEventActivity extends EventSuperClass {
         HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
 
         startCalendar.set(message.get("Year"), message.get("Month"), message.get("Day"));
+        endCalendar = (Calendar) startCalendar.clone();
         endCalendar.set(Calendar.HOUR_OF_DAY, endCalendar.get(Calendar.HOUR_OF_DAY) + 1);
 
         String hintStartDate = dateString(startCalendar);

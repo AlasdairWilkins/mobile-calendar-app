@@ -3,6 +3,7 @@ package com.example.alasdairwilkins.calendarmobile;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 abstract class TimeManipulationSuperClass extends AppCompatActivity {
@@ -49,6 +50,14 @@ abstract class TimeManipulationSuperClass extends AppCompatActivity {
         return ((calendar.get(Calendar.HOUR) == 0) ? 12 : calendar.get(Calendar.HOUR)) + ":" +
                 ((calendar.get(Calendar.MINUTE) < 10) ? "0" : "") + calendar.get(Calendar.MINUTE) + " " +
                 calendar.getDisplayName(Calendar.AM_PM, Calendar.LONG, Locale.ENGLISH);
+    }
+
+    public HashMap<String,Integer> makeHashMap(Calendar calendar){
+        HashMap newMap = new HashMap<String,Integer>();
+        newMap.put("Year", calendar.get(Calendar.YEAR));
+        newMap.put("Month", calendar.get(Calendar.MONTH));
+        newMap.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
+        return newMap;
     }
 
 }

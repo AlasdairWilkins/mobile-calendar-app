@@ -3,6 +3,7 @@ package com.example.alasdairwilkins.calendarmobile;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +40,7 @@ public class MainActivity extends TimeManipulationSuperClass {
 
     private JSONObject eventsObject;
 
-    private Boolean noDaySelected = true;
+    private Boolean noDaySelected;
 
 
     Calendar calendar = Calendar.getInstance();
@@ -95,6 +96,7 @@ public class MainActivity extends TimeManipulationSuperClass {
         buildButtons();
         buildMonth(eventsObject, displayMonth, displayYear);
 
+        noDaySelected = true;
 
 
         previousMonthTextView.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +175,14 @@ public class MainActivity extends TimeManipulationSuperClass {
                 String dateKey = Long.toString(buildCal.getTimeInMillis());
                 try {
                     JSONArray eventsArray = (JSONArray) eventsObject.get(dateKey);
-                    textView.setText(Integer.toString(number) + (eventsArray.length() > 0 ? "\n" + eventsArray.length() : ""));
+                    int eventsArrayLength = eventsArray.length();
+                    String date = Integer.toString(number);
+                    if (eventsArrayLength > 0) {
+                        String events = Integer.toString(eventsArrayLength);
+                        textView.setText(Html.fromHtml("<b>" + date + "</b><br/><em>" + events + "</em>"));
+                    } else {
+                        textView.setText(Html.fromHtml("<b>" + date + "</b>"));
+                    }
                 } catch (org.json.JSONException error){
                     Log.e(TAG, "Error: " + error);
                 }
@@ -232,7 +241,7 @@ public class MainActivity extends TimeManipulationSuperClass {
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray responseArray) {
-                        Intent intent = new Intent(MainActivity.this, DayViewActivity.class);
+                        Intent intent = new Intent(MainActivity.this, AllEventsActivity.class);
                         intent.putExtra("events", responseArray.toString());
                         startActivity(intent);
                     }
@@ -262,12 +271,5 @@ public class MainActivity extends TimeManipulationSuperClass {
         }
     }
 
-    public HashMap<String,Integer> makeHashMap(Calendar calendar){
-        HashMap newMap = new HashMap<String,Integer>();
-        newMap.put("Year", calendar.get(Calendar.YEAR));
-        newMap.put("Month", calendar.get(Calendar.MONTH));
-        newMap.put("Day", calendar.get(Calendar.DAY_OF_MONTH));
-        return newMap;
-    }
 
 }
