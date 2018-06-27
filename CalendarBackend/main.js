@@ -13,7 +13,6 @@ let db = new sqlite3.Database(database, (err) => {
     if (err) {
         return console.error(err.message);
     }
-    console.log('Connected to the SQlite database.');
 });
 
 let sql =
@@ -30,10 +29,7 @@ let sql =
 
 db.run(sql, (err) => {
     if (err) {
-        return console.error(err.message, sql)
-    } else {
-        return console.log("Success!", sql)
-    }
+        return console.error(err.message)
 })
 
 db.close()
@@ -50,7 +46,6 @@ app.get('/events', (req, res) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log('Connected to the SQlite database.');
     });
 
     let sql =
@@ -65,10 +60,8 @@ app.get('/events', (req, res) => {
         }
         if (Object.keys(req.query).length !== 0) {
             res.send(parseData(rows, Number(req.query.start), Number(req.query.end)));
-            console.log(req.query)
         } else {
             res.send(rows);
-            console.log("No query!")
         }
 
     });
@@ -84,15 +77,16 @@ app.post('/events', (req, res) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log('Connected to the SQlite database.');
     });
 
     let sql =
         `INSERT INTO events (user, title, description, start_time, end_time, all_day)
-        VALUES ('${req.body.user}', '${req.body.title}', '${req.body.description}', 
-        '${req.body.start_time}', '${req.body.end_time}', '${req.body.all_day}')`
+        VALUES (?, ?, ?, ?, ?, ?)`
 
-    db.run(sql, function(err) {
+    let params = [req.body.user, req.body.title, req.body.description, req.body.start_time, req.body.end_time, req.body.all_day]
+
+
+    db.run(sql, params, function(err) {
         if (err) {
             return console.error(err.message)
         } else {
@@ -114,13 +108,12 @@ app.delete('/events/:id', (req, res) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log('Connected to the SQlite database.');
     });
 
     let sql =
-        `DELETE FROM events WHERE rowid=${req.params.id}`
+        `DELETE FROM events WHERE rowid=?`
 
-    db.run(sql, (err) => {
+    db.run(sql, req.params.id, (err) => {
         if (err) {
             return console.error(err.message)
         } else {
@@ -144,14 +137,17 @@ app.put('/events/:id', (req, res) => {
 
     let sql =
         `UPDATE events
-        SET user = '${req.body.user}',
-            title = '${req.body.title}',
-            description = '${req.body.description}',
-            start_time = '${req.body.start_time}',
-            end_time = '${req.body.end_time}',
-            all_day = '${req.body.all_day}'
+        SET user = ?,
+            title = ?,
+            description = ?,
+            start_time = ?,
+            end_time = ?,
+            all_day = ?
         WHERE
-            ID = ${req.params.id}`
+            ID = ?`
+
+    let params = [req.body.user, req.body.title, req.body.description, req.body.start_time,
+        req.body.end_time, req.body.all_day, req.params.id]
 
     db.run(sql, (err) => {
         if (err) {

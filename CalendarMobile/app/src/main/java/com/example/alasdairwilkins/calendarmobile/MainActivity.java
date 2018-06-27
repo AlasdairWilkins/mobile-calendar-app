@@ -54,15 +54,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-        Log.d(TAG, "Intent: " + intent);
-
-        if (intent.hasCategory("android.intent.category.LAUNCHER")) {
-            Log.d(TAG, "Hello");
-        } else {
-            Log.d(TAG, "Ahoy hoy");
-        }
-
         displayMonthTextView = (TextView) findViewById(R.id.displayMonth);
         previousMonthTextView = (TextView) findViewById(R.id.previousMonth);
         nextMonthTextView = (TextView) findViewById(R.id.nextMonth);

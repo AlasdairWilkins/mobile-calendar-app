@@ -34,8 +34,6 @@ public class CreateEventActivity extends EventActivity {
         super.onCreate(savedInstanceState);
 
 
-
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
