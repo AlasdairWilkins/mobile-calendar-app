@@ -128,7 +128,7 @@ app.delete('/events/:id', (req, res) => {
 })
 
 app.put('/events/:id', (req, res) => {
-
+    
     let db = new sqlite3.Database(database, (err) => {
         if (err) {
             return console.error(err.message);
@@ -150,7 +150,7 @@ app.put('/events/:id', (req, res) => {
     let params = [req.body.user, req.body.title, req.body.description, req.body.start_time,
         req.body.end_time, req.body.all_day, req.params.id]
 
-    db.run(sql, (err) => {
+    db.run(sql, params, (err) => {
         if (err) {
             return console.error(err.message, sql)
         } else {
@@ -160,7 +160,7 @@ app.put('/events/:id', (req, res) => {
 
     db.close()
 
-    res.send("You updated an event!")
+    res.send(req.body)
 })
 
 function parseData(events, start, end) {

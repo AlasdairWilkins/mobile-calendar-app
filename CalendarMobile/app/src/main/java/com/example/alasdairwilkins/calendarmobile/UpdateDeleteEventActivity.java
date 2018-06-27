@@ -87,7 +87,7 @@ public class UpdateDeleteEventActivity extends EventActivity {
                         eventObject.put("description", eventDescription.getText());
                         eventObject.put("start_time", startCalendar.getTimeInMillis());
                         eventObject.put("end_time", endCalendar.getTimeInMillis());
-                        eventObject.put("all_day", allDayCheckBox.isChecked());
+                        eventObject.put("all_day", Boolean.toString(allDayCheckBox.isChecked()));
                     } catch (JSONException e) {
                         Log.e(TAG, "Unexpected JSON exception", e);
                     }

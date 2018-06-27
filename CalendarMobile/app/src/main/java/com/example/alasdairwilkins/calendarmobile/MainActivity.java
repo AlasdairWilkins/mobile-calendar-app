@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,12 +18,10 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private String lastClickedID = "";
 
     private JSONObject eventsObject;
+
+    private Boolean noDaySelected = true;
+
 
     Calendar calendar = Calendar.getInstance();
 
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public void getEvents(long startMillis, long endMillis) {
 
         RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(MainActivity.this);
+
         String url = "http://10.0.17.212:8000/events?start=" + startMillis + "&end=" + endMillis;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -196,11 +197,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         if (lastClickedID.equals(getResources().getResourceEntryName(view.getId()))) {
                             lastClickedID = "";
+                            noDaySelected = true;
                             Log.d(TAG, "Ahoy hoy");
                             calendar.set(Calendar.DAY_OF_MONTH, currentDay);
                             buildButtons();
                         } else {
                             lastClickedID = getResources().getResourceEntryName(view.getId());
+                            noDaySelected = false;
                             calendar.set(Calendar.DAY_OF_MONTH, displayNumber);
                             createEventButton.setText("Create event for " +
                                     buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
@@ -227,7 +230,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void viewEvent(View view) {
-        Intent intent = new Intent(this, ShowEventsActivity.class);
+        if (noDaySelected) {
+            viewAll(view);
+        } else {
+            viewDay(view);
+        }
+    }
+
+    public void viewAll(View view) {
+
+        RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(MainActivity.this);
+        String url = "http://10.0.17.212:8000/events";
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray responseArray) {
+                        Intent intent = new Intent(MainActivity.this, DayViewActivity.class);
+                        intent.putExtra("events", responseArray.toString());
+                        startActivity(intent);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error: " + error);
+                    }
+                });
+
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    public void viewDay(View view) {
+        Intent intent = new Intent(this, DayViewActivity.class);
         HashMap<String, Integer> message = makeHashMap(calendar);
         intent.putExtra("map", message);
 
