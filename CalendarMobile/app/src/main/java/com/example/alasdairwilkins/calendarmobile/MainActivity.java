@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private int displayYear = 0;
     private String lastClickedID = "";
 
+    private JSONObject eventsObject;
+
     Calendar calendar = Calendar.getInstance();
 
     int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void buildDisplay(JSONObject responseObject) {
-        final JSONObject eventsObject = responseObject;
+        eventsObject = responseObject;
         Log.d(TAG, "Response object: " + eventsObject);
         buildButtons();
         buildMonth(eventsObject, displayMonth, displayYear);
@@ -237,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void seeEvents(View view) {
-
+        Log.d(TAG, "TEST");
     }
 
     public void setMinimumDate(Calendar cal, int month) {
