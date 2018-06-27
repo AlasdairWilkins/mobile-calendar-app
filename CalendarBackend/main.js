@@ -23,13 +23,14 @@ let sql =
      description TEXT,
      start_time BIGINT NOT NULL,
      end_time BIGINT NOT NULL,
-     all_day BOOLEAN NOT NULL
+     all_day TEXT NOT NULL
     );`
 
 
 db.run(sql, (err) => {
     if (err) {
         return console.error(err.message)
+    }
 })
 
 db.close()
