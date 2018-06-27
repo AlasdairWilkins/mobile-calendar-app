@@ -53,10 +53,7 @@ app.get('/events', (req, res) => {
         console.log('Connected to the SQlite database.');
     });
 
-    let sql = (Object.keys(req.query).length !== 0) ?
-        `SELECT *
-        FROM EVENTS`
-        :
+    let sql =
         `SELECT *
         FROM EVENTS
         ORDER BY
@@ -67,7 +64,6 @@ app.get('/events', (req, res) => {
             throw err;
         }
         if (Object.keys(req.query).length !== 0) {
-            console.log("Made it here!")
             res.send(parseData(rows, Number(req.query.start), Number(req.query.end)));
             console.log(req.query)
         } else {
