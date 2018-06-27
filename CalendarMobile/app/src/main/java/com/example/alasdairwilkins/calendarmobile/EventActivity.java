@@ -63,11 +63,10 @@ abstract class EventActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        setContentView(R.layout.activity_create_event);
 
         activityHeader = (TextView) findViewById(R.id.activityHeader);
 
-        eventTitle = (EditText) findViewById(R.id.title);
+        eventTitle = (EditText) findViewById(R.id.eventTitle);
         eventTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -85,7 +84,7 @@ abstract class EventActivity extends AppCompatActivity {
             }
         });
 
-        eventDescription = (EditText) findViewById(R.id.description);
+        eventDescription = (EditText) findViewById(R.id.eventDescription);
 
         startDateTextView = (TextView) findViewById(R.id.startDate);
         startTimeTextView = (TextView) findViewById(R.id.startTime);
@@ -111,9 +110,6 @@ abstract class EventActivity extends AppCompatActivity {
                 }
             }
         });
-
-        submitButton = (Button) findViewById(R.id.submit);
-        submitButton.setEnabled(false);
 
         startDateTextView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -207,6 +203,7 @@ abstract class EventActivity extends AppCompatActivity {
                 checkSubmit();
             }
         };
+
 
     }
 
