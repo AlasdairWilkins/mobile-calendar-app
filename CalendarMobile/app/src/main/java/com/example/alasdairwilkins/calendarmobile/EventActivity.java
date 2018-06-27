@@ -236,7 +236,7 @@ abstract class EventActivity extends AppCompatActivity {
                 Log.d(CreateEventActivity.TAG, eventObject.toString());
 
                 RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(EventActivity.this);
-                String url = "http://10.0.19.178:8000/events";
+                String url = "http://10.0.17.212:8000/events";
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.POST, url, eventObject, new Response.Listener<JSONObject>() {

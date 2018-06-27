@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView previousMonthTextView;
     private TextView nextMonthTextView;
     private Button createEventButton;
-    private Button getEventButton;
+    private Button viewEventButton;
 
     private long startRange = 0;
     private long endRange = 0;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         previousMonthTextView = (TextView) findViewById(R.id.previousMonth);
         nextMonthTextView = (TextView) findViewById(R.id.nextMonth);
         createEventButton = (Button) findViewById(R.id.createEvent);
-        getEventButton = (Button) findViewById(R.id.getEvent);
+        viewEventButton = (Button) findViewById(R.id.viewEvent);
 
         displayMonth = calendar.get(Calendar.MONTH);
         displayYear = calendar.get(Calendar.YEAR);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public void getEvents(long startMillis, long endMillis) {
 
         RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(MainActivity.this);
-        String url = "http://10.0.19.178:8000/events?start=" + startMillis + "&end=" + endMillis;
+        String url = "http://10.0.17.212:8000/events?start=" + startMillis + "&end=" + endMillis;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -113,23 +113,23 @@ public class MainActivity extends AppCompatActivity {
         previousMonthTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setMinimumDate(calendar, displayMonth);
-                displayMonth = calendar.get(Calendar.MONTH);
-                displayYear = calendar.get(Calendar.YEAR);
-                if (startRange <= calendar.getTimeInMillis()) {
-                    Log.d(TAG, "Current Info: Not yet!");
-                    buildMonth(eventsObject, displayMonth, displayYear);
-                } else {
-                    Calendar prevCal = (Calendar) calendar.clone();
-                    setMaximumDate(prevCal, displayMonth);
-                    long endMillis = prevCal.getTimeInMillis();
-                    setMinimumDate(prevCal, displayMonth);
-                    long startMillis = prevCal.getTimeInMillis();
-                    startRange = startMillis;
-                    endRange = endMillis;
-                    Log.d(TAG, "Range: " + startMillis + ", " + endMillis);
-                    getEvents(startMillis, endMillis);
-                }
+//                setMinimumDate(calendar, displayMonth);
+//                displayMonth = calendar.get(Calendar.MONTH);
+//                displayYear = calendar.get(Calendar.YEAR);
+//                if (startRange <= calendar.getTimeInMillis()) {
+//                    Log.d(TAG, "Current Info: Not yet!");
+//                    buildMonth(eventsObject, displayMonth, displayYear);
+//                } else {
+//                    Calendar prevCal = (Calendar) calendar.clone();
+////                    setMaximumDate(prevCal, displayMonth);
+//                    long endMillis = prevCal.getTimeInMillis();
+////                    setMinimumDate(prevCal, displayMonth);
+//                    long startMillis = prevCal.getTimeInMillis();
+//                    startRange = startMillis;
+//                    endRange = endMillis;
+//                    Log.d(TAG, "Range: " + startMillis + ", " + endMillis);
+//                    getEvents(startMillis, endMillis);
+//                }
             }
         });
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void buildButtons() {
         createEventButton.setText("Create an event");
-        getEventButton.setText("See all events");
+        viewEventButton.setText("View all events");
     }
 
     public void buildMonthViews(Calendar calendar, int year, int month) {
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                             calendar.set(Calendar.DAY_OF_MONTH, displayNumber);
                             createEventButton.setText("Create event for " +
                                     buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
-                            getEventButton.setText("See events for " + buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
+                            viewEventButton.setText("View " + buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
                             Log.d(TAG, "BUTTON PRESS" + buildCal.get(Calendar.DAY_OF_MONTH));
                         }
 
@@ -235,11 +235,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void seeEvents(View view) {
+    public void viewEvent(View view) {
         Intent intent = new Intent(this, ShowEventsActivity.class);
-        HashMap<String,Integer> message = makeHashMap(calendar);
+        HashMap<String, Integer> message = makeHashMap(calendar);
         intent.putExtra("map", message);
-        startActivity(intent);
+
+        setMinimumTime(calendar);
+        String dateKey = Long.toString(calendar.getTimeInMillis());
+        try {
+            JSONArray eventsArray = (JSONArray) eventsObject.get(dateKey);
+            intent.putExtra("events", eventsArray.toString());
+            startActivity(intent);
+        } catch (org.json.JSONException error) {
+            Log.e(TAG, "Error: " + error);
+        }
     }
 
     public HashMap<String,Integer> makeHashMap(Calendar calendar){
@@ -251,19 +260,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setMinimumDate(Calendar cal, int month) {
-        cal.set(Calendar.MONTH, month - 1);
-        Log.d(TAG, "Current Info: " + cal.get(Calendar.MONTH) + ", " + cal.get(Calendar.YEAR));
+//        , int month
+//        cal.set(Calendar.MONTH, month - 1);
+//        Log.d(TAG, "Current Info: " + cal.get(Calendar.MONTH) + ", " + cal.get(Calendar.YEAR));
         cal.set(Calendar.DAY_OF_MONTH, 1);
+    }
+
+    public void setMinimumTime(Calendar cal) {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
     }
 
-    public void setMaximumDate(Calendar cal, int month) {
-        cal.set(Calendar.MONTH, month + 1);
-        cal.get(Calendar.YEAR);
+    public void setMaximumDate(Calendar cal) {
+        //        , int month
+//        cal.set(Calendar.MONTH, month + 1);
+//        cal.get(Calendar.YEAR);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+    }
+
+    public void setMaximumTime(Calendar cal) {
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
