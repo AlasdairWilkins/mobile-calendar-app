@@ -50,8 +50,6 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
         try {
             final JSONObject jsonObject = new JSONObject(jsonString);
 
-            Log.d(TAG, "Here it is: " + jsonObject);
-
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
 
@@ -98,7 +96,6 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
                     } catch (JSONException e) {
                         Log.e(TAG, "Unexpected JSON exception", e);
                     }
-                    Log.d(TAG, eventObject.toString());
 
                     RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(UpdateDeleteEventActivity.this);
                     String url = "http://calendar.alasdairwilkins.com/events/" + id;
@@ -107,7 +104,6 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
                             (Request.Method.PUT, url, eventObject, new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject responseObject) {
-                                    Log.d(TAG, "Response object: " + responseObject);
                                     Intent intent = new Intent(UpdateDeleteEventActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }
@@ -134,7 +130,6 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
                             (Request.Method.DELETE, url, new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String responseString) {
-                                    Log.d(TAG, "Response object: " + responseString);
                                     Intent intent = new Intent(UpdateDeleteEventActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 }

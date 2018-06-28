@@ -72,13 +72,19 @@ public class CreateEventActivity extends EventSuperClass {
                     eventObject.put("user", "Alasdair Wilkins");
                     eventObject.put("title", eventTitle.getText());
                     eventObject.put("description", eventDescription.getText());
-                    eventObject.put("start_time", startCalendar.getTimeInMillis());
-                    eventObject.put("end_time", endCalendar.getTimeInMillis());
                     eventObject.put("all_day", Boolean.toString(allDayCheckBox.isChecked()));
+
+                    if (allDayCheckBox.isChecked()) {
+                        eventObject.put("start_time", getMinimumTime(startCalendar));
+                        eventObject.put("end_time", getMinimumTime(endCalendar));
+                    } else {
+                        eventObject.put("start_time", startCalendar.getTimeInMillis());
+                        eventObject.put("end_time", endCalendar.getTimeInMillis());
+                    }
+
                 } catch (JSONException e) {
                     Log.e(TAG, "Unexpected JSON exception", e);
                 }
-                Log.d(TAG, eventObject.toString());
 
                 RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(CreateEventActivity.this);
                 String url = "http://calendar.alasdairwilkins.com/events";
@@ -87,7 +93,6 @@ public class CreateEventActivity extends EventSuperClass {
                         (Request.Method.POST, url, eventObject, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject responseObject) {
-                                Log.d(TAG, "Response object: " + responseObject);
                                 Intent intent = new Intent(CreateEventActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }

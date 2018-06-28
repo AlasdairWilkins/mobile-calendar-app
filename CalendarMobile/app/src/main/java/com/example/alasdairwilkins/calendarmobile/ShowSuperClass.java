@@ -55,8 +55,6 @@ abstract class ShowSuperClass extends TimeManipulationSuperClass {
 
             final JSONArray jsonArray = new JSONArray(jsonString);
 
-            Log.d(TAG, "JSON Array: " + jsonArray);
-
             int jsonArrayLength = jsonArray.length();
 
             if (jsonArrayLength > 0) {
@@ -76,7 +74,7 @@ abstract class ShowSuperClass extends TimeManipulationSuperClass {
                     String startDate = dateString(startCal);
                     String endDate = dateString(endCal);
                     if (allDay) {
-                        if (startLong == endLong) {
+                        if (startLong.equals(endLong)) {
                             textView.setText(Html.fromHtml("<b>" + title + "</b><br/><em>" + description
                                     + "</em><br/>" + startDate));
                         } else {

@@ -92,7 +92,6 @@ public class MainActivity extends TimeManipulationSuperClass {
 
     protected void buildDisplay(JSONObject responseObject) {
         eventsObject = responseObject;
-        Log.d(TAG, "Response object: " + eventsObject);
         buildButtons();
         buildMonth(eventsObject, displayMonth, displayYear);
 
@@ -193,7 +192,6 @@ public class MainActivity extends TimeManipulationSuperClass {
                         if (lastClickedID.equals(getResources().getResourceEntryName(view.getId()))) {
                             lastClickedID = "";
                             noDaySelected = true;
-                            Log.d(TAG, "Ahoy hoy");
                             calendar.set(Calendar.DAY_OF_MONTH, currentDay);
                             buildButtons();
                         } else {
@@ -203,7 +201,6 @@ public class MainActivity extends TimeManipulationSuperClass {
                             createEventButton.setText("Create event for " +
                                     buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
                             viewEventButton.setText("View " + buildCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + " " + displayNumber);
-                            Log.d(TAG, "BUTTON PRESS" + buildCal.get(Calendar.DAY_OF_MONTH));
                         }
 
 

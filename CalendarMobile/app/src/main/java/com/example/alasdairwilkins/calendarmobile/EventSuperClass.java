@@ -52,14 +52,10 @@ abstract class EventSuperClass extends TimeManipulationSuperClass {
         eventTitle = (EditText) findViewById(R.id.eventTitle);
         eventTitle.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.d(TAG, "Before Text Change: " + charSequence + i + i1 + i2);
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.d(TAG, "On Text Change: " + charSequence + i + i1 + i2);
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {

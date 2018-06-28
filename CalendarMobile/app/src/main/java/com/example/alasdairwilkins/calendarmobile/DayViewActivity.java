@@ -21,13 +21,10 @@ public class DayViewActivity extends ShowSuperClass {
 
         final HashMap<String,Integer> message = (HashMap<String,Integer>) intent.getSerializableExtra("map");
 
-        Log.d(TAG, "Received: " + message);
-
         Calendar calendar = Calendar.getInstance();
         calendar.set(message.get("Year"), message.get("Month"), message.get("Day"));
 
         showEventsTitle.setText(Html.fromHtml("<big>Events for " + dateString(calendar) + "</big><br/>"));
-
 
         createEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
