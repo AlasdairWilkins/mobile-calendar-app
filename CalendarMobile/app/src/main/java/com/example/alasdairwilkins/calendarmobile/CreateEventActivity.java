@@ -81,7 +81,7 @@ public class CreateEventActivity extends EventSuperClass {
                 Log.d(TAG, eventObject.toString());
 
                 RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(CreateEventActivity.this);
-                String url = "http://10.0.17.212:8000/events";
+                String url = "http://calendar.alasdairwilkins.com/events";
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                         (Request.Method.POST, url, eventObject, new Response.Listener<JSONObject>() {

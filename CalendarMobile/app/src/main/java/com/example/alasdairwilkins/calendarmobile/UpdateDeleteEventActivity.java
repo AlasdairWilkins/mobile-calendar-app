@@ -18,6 +18,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
+
 public class UpdateDeleteEventActivity extends EventSuperClass {
 
 
@@ -48,10 +50,16 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
         try {
             final JSONObject jsonObject = new JSONObject(jsonString);
 
+            Log.d(TAG, "Here it is: " + jsonObject);
+
             String title = jsonObject.getString("title");
             String description = jsonObject.getString("description");
 
-            Boolean allDay = jsonObject.getBoolean("all_day");
+            Boolean allDay = Boolean.parseBoolean(jsonObject.getString("all_day"));
+
+            if (allDay) {
+                allDayCheckBox.setChecked(true);
+            }
 
             long startLong = jsonObject.getLong("start_time");
             long endLong = jsonObject.getLong("end_time");
@@ -59,6 +67,7 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
             final int id = jsonObject.getInt("id");
 
             startCalendar.setTimeInMillis(startLong);
+            endCalendar = (Calendar) startCalendar.clone();
             endCalendar.setTimeInMillis(endLong);
 
             String startDate = dateString(startCalendar);
@@ -92,7 +101,7 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
                     Log.d(TAG, eventObject.toString());
 
                     RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(UpdateDeleteEventActivity.this);
-                    String url = "http://10.0.17.212:8000/events/" + id;
+                    String url = "http://calendar.alasdairwilkins.com/events/" + id;
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                             (Request.Method.PUT, url, eventObject, new Response.Listener<JSONObject>() {
@@ -119,7 +128,7 @@ public class UpdateDeleteEventActivity extends EventSuperClass {
                 public void onClick(View view) {
 
                     RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(UpdateDeleteEventActivity.this);
-                    String url = "http://10.0.17.212:8000/events/" + id;
+                    String url = "http://calendar.alasdairwilkins.com/events/" + id;
 
                     StringRequest stringRequest = new StringRequest
                             (Request.Method.DELETE, url, new Response.Listener<String>() {

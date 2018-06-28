@@ -72,7 +72,7 @@ public class MainActivity extends TimeManipulationSuperClass {
 
         RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(MainActivity.this);
 
-        String url = "http://10.0.17.212:8000/events?start=" + startMillis + "&end=" + endMillis;
+        String url = "http://calendar.alasdairwilkins.com/events?start=" + startMillis + "&end=" + endMillis;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -235,7 +235,7 @@ public class MainActivity extends TimeManipulationSuperClass {
     public void viewAll(View view) {
 
         RequestQueue requestQueue = (RequestQueue) Volley.newRequestQueue(MainActivity.this);
-        String url = "http://10.0.17.212:8000/events";
+        String url = "http://calendar.alasdairwilkins.com/events";
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
