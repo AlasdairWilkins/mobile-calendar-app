@@ -35,8 +35,8 @@ db.run(sql, (err) => {
 
 db.close()
 
-http.listen(8000, "0.0.0.0", function() {
-    console.log('Calendar backend listening on port 8000!');
+http.listen(9000, "0.0.0.0", function() {
+    console.log('Calendar backend listening on port 9000!');
 });
 
 app.get('/events', (req, res) => {
@@ -128,7 +128,7 @@ app.delete('/events/:id', (req, res) => {
 })
 
 app.put('/events/:id', (req, res) => {
-    
+
     let db = new sqlite3.Database(database, (err) => {
         if (err) {
             return console.error(err.message);
